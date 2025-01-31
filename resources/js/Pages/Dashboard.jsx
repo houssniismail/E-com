@@ -13,10 +13,12 @@ export default function Dashboard() {
             <Head title="Dashboard" />
 
             <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-7xl ">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            You're logged in!
+                        <div className=" text-gray-900">
+                            <div className=" grid grid-cols-4 max-w-screen-2xl ">
+                                <a className=' m-4 w-full border p-4 text-center font-bold text-[30px] rounded-lg text-white bg-[#22c55e] ' href={'/products'}>List of products</a>
+                            </div>
                         </div>
                     </div>
                 </div>

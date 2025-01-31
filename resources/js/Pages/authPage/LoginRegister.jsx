@@ -1,6 +1,12 @@
 import React from 'react'
-import { Head, Link } from '@inertiajs/react';
-const LoginRegister = ({ auth }) => {
+import Checkbox from '@/Components/Checkbox';
+import InputError from '@/Components/InputError';
+import InputLabel from '@/Components/InputLabel';
+import PrimaryButton from '@/Components/PrimaryButton';
+import TextInput from '@/Components/TextInput';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
+
+const LoginRegister = ({ auth, status, canResetPassword }) => {
 
     const handleImageError = () => {
         document
@@ -12,6 +18,39 @@ const LoginRegister = ({ auth }) => {
             ?.classList.add('!flex-row');
         document.getElementById('background')?.classList.add('!hidden');
     };
+
+
+    const { data, setData, post, processing, errors, reset } = useForm({
+        email: '',
+        password: '',
+        remember: false,
+    });
+
+    const submit = (e) => {
+        e.preventDefault();
+
+        post(route('login'), {
+            onFinish: () => reset('password'),
+        });
+    };
+
+    const { dataRegister, setDataRegister, postRegister, processingRegister, errorsRegister, resetRegister } = useForm({
+        name: '',
+        email: '',
+        password: '',
+        password_confirmation: '',
+    });
+
+    const submitRegister = (e) => {
+        e.preventDefault();
+
+        post(route('register'), {
+            onFinish: () => reset('password', 'password_confirmation'),
+        });
+    };
+
+    const { props } = usePage();
+    const csrfToken = props.csrf_token;
 
     return (
         <div>
@@ -80,52 +119,133 @@ const LoginRegister = ({ auth }) => {
                         </header>
 
                         <main className="bg-white">
-                            <div className="grid gap-6 lg:grid-cols-2 lg:gap-8 border h-[70vh]">
-                                <div className="mx-6 border-r-2">
+                            <div className="grid gap-6 lg:grid-cols-2 lg:gap-8 border my-6 py-6">
+                                <div className="mx-6 lg:border-r-2">
                                     <div className='my-2'>
                                         <p>Log in</p>
                                     </div>
-                                    <form className='max-w-sm '>
-                                        <div className="mb-5">
-                                            <label for="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email *</label>
-                                            <input type="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+                                    {status && (
+                                        <div className="mb-4 text-sm font-medium text-green-600">
+                                            {status}
                                         </div>
-                                        <div className="mb-5">
-                                            <label for="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password *</label>
-                                            <input type="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+                                    )}
+
+                                    <form onSubmit={submit} className='max-w-sm ' >
+                                        <div>
+                                            <InputLabel htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" value="Email" />
+
+                                            <TextInput
+                                                id="email"
+                                                type="email"
+                                                name="email"
+                                                value={data.email}
+                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                autoComplete="username"
+                                                isFocused={true}
+                                                onChange={(e) => setData('email', e.target.value)}
+                                            />
+
+                                            <InputError message={errors.email} className="mt-2" />
                                         </div>
-                                        <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Log in</button>
+
+                                        <div className="mt-4">
+                                            <InputLabel htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" value="Password" />
+
+                                            <TextInput
+                                                id="password"
+                                                type="password"
+                                                name="password"
+                                                value={data.password}
+                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                autoComplete="current-password"
+                                                onChange={(e) => setData('password', e.target.value)}
+                                            />
+
+                                            <InputError message={errors.password} className="mt-2" />
+                                        </div>
+
+                                        <div className="mt-4 block">
+                                            <label className="flex items-center">
+                                                <Checkbox
+                                                    name="remember"
+                                                    checked={data.remember}
+                                                    onChange={(e) =>
+                                                        setData('remember', e.target.checked)
+                                                    }
+                                                />
+                                                <span className="ms-2 text-sm text-gray-600">
+                                                    Remember me
+                                                </span>
+                                            </label>
+                                        </div>
+
+                                        <div className='flex justify-end'>
+                                            {canResetPassword && (
+                                                <Link
+                                                    href={route('password.request')}
+                                                    className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                                >
+                                                    Forgot your password?
+                                                </Link>
+                                            )}
+                                        </div>
+
+                                        <div className="mt-4 flex items-center justify-start">
+
+
+                                            <PrimaryButton className="text-white bg-[#f97316] hover:bg-[#f97316] focus:ring-4 focus:outline-none focus:ring-[#f97316] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-[#f97316] dark:hover:bg-[#f97316] dark:focus:ring-[#f97316]" disabled={processing}>
+                                                Log in
+                                            </PrimaryButton>
+                                        </div>
                                     </form>
+                                    {/* </GuestLayout> */}
+
                                 </div>
                                 <div className="mx-6">
                                     <div className='my-2'>
                                         <p>Sign up</p>
                                     </div>
-                                    <form className='max-w-sm '>
+                                    <form className='max-w-sm ' action="register" method="POST">
+                                        <input type="hidden" name="_token" value={csrfToken} />
                                         <div className="mb-5">
-                                            <label for="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email *</label>
-                                            <input type="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+                                            <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name *</label>
+                                            <input type="text" name='name' id="nameRegister" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
                                         </div>
                                         <div className="mb-5">
-                                            <label for="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password *</label>
-                                            <input type="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+                                            <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email *</label>
+                                            <input type="email" name='email' id="emailRegister" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+                                        </div>
+                                        <div className="mb-5">
+                                            <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password *</label>
+                                            <input type="password" id="passwordRegister" name='password' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+                                        </div>
+                                        <div className="mb-5">
+                                            <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password Confirmation *</label>
+                                            <input type="password" name='password_confirmation' id="password_confirmation" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
                                         </div>
 
                                         <div>
                                             <div>
                                                 <p className='block mb-2 text-sm font-medium text-gray-900 dark:text-white' >Gender (Optional)</p>
                                             </div>
-                                        <div className="grid grid-cols-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-12 my-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                            <button className='border-r-2' >Man</button>
-                                            <button>Woman</button>
+                                            <div className="grid grid-cols-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-12 my-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                <button className='border-r-2' >Man</button>
+                                                <button>Woman</button>
+                                            </div>
                                         </div>
+                                        <div>
+                                            <Link
+                                                href={route('login')}
+                                                className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                            >
+                                                Already registered?
+                                            </Link>
                                         </div>
                                         <button type="submit" className="text-white bg-[#f97316] hover:bg-[#f97316] focus:ring-4 focus:outline-none focus:ring-[#f97316] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-[#f97316] dark:hover:bg-[#f97316] dark:focus:ring-[#f97316]">Register</button>
                                     </form>
                                 </div>
                             </div>
                         </main>
-
                     </div>
                 </div>
             </div>
