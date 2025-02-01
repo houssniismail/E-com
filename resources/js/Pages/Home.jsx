@@ -1,19 +1,9 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 
 export default function Welcome({ auth, laravelVersion, phpVersion }) {
-    const handleImageError = () => {
-        document
-            .getElementById('screenshot-container')
-            ?.classList.add('!hidden');
-        document.getElementById('docs-card')?.classList.add('!row-span-1');
-        document
-            .getElementById('docs-card-content')
-            ?.classList.add('!flex-row');
-        document.getElementById('background')?.classList.add('!hidden');
-    };
-
     const { props } = usePage();
     const products = props.products || [];
+    const categories = props.categories || [];
 
     return (
         <>
@@ -82,89 +72,30 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
 
                         <main className="mt-6">
                             <div className="grid gap-6 lg:grid-cols-3 lg:gap-8">
-                                <a
-                                    id="product_card_1"
-                                    className="flex "
-                                    href='#'
-                                >
-                                    <div className="relative flex items-center gap-6 lg:items-end">
-                                        <div
-                                            id="docs-card-content"
-                                            className="flex items-start gap-6 flex-col"
+                                {categories.length === 0 ? (
+                                    <p>No Categories found.</p>
+                                ) : (
+                                    categories.map((category) => (
+                                        <a
+                                            id="product_card_1"
+                                            className="flex "
+                                            href='#'
+                                            key={category.id}
                                         >
-                                            <div className="">
-                                                <img src="images/image1.webp" className='rounded-[20px]' alt="Example Image" />
+                                            <div className="relative flex items-center gap-6 lg:items-end">
+                                                <div
+                                                    id="docs-card-content"
+                                                    className="flex items-start gap-6 flex-col"
+                                                >
+                                                    <div className="">
+                                                        <img src={`/storage/${category.image}`} className='rounded-[20px] h-[940px]' alt="Example Image" />
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </a>
+                                        </a>
 
-                                <a
-                                    id="product_card_2"
-                                    className="flex "
-                                    href='#'
-                                >
-                                    <div className="relative flex items-center gap-6 lg:items-end">
-                                        <div
-                                            id="docs-card-content"
-                                            className="flex items-start gap-6 flex-col"
-                                        >
-                                            <div className="">
-                                                <img src="images/image2.webp" className='rounded-[20px]' alt="Example Image" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a
-                                    id="product_card_3"
-                                    className="flex "
-                                    href='#'
-                                >
-                                    <div className="relative flex items-center gap-6 lg:items-end">
-                                        <div
-                                            id="docs-card-content"
-                                            className="flex items-start gap-6 flex-col"
-                                        >
-                                            <div className="">
-                                                <img src="images/image3.webp" className='rounded-[20px]' alt="Example Image" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-
-                                <a
-                                    id="product_card_4"
-                                    className="flex "
-                                    href="#"
-                                >
-                                    <div className="relative flex items-center gap-6 lg:items-end">
-                                        <div
-                                            id="docs-card-content"
-                                            className="flex items-start gap-6 flex-col"
-                                        >
-                                            <div className="">
-                                                <img src="images/image4.webp" className='rounded-[20px]' alt="Example Image" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-
-                                <a
-                                    id="docs-card_5"
-                                    className="flex "
-                                    href="#"
-                                >
-                                    <div className="relative flex items-center gap-6 lg:items-end">
-                                        <div
-                                            id="docs-card-content"
-                                            className="flex items-start gap-6 flex-col"
-                                        >
-                                            <div className="">
-                                                <img src="images/image5.webp" className='rounded-[20px]' alt="Example Image" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
+                                    ))
+                                )}
                             </div>
                         </main>
                         <div className='grid grid-cols-2 w-full border my-5 h-12 bg-[#a09892] text-white'>

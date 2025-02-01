@@ -1,22 +1,42 @@
 import React from 'react'
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 
-const Create = ({ auth }) => {
-
-  const handleImageError = () => {
-    document
-      .getElementById('screenshot-container')
-      ?.classList.add('!hidden');
-    document.getElementById('docs-card')?.classList.add('!row-span-1');
-    document
-      .getElementById('docs-card-content')
-      ?.classList.add('!flex-row');
-    document.getElementById('background')?.classList.add('!hidden');
-  };
-
+const Edit = ({ auth, product }) => {
   const { props } = usePage();
   const successMessage = props.flash?.success;
   const csrfToken = props.csrf_token;
+
+  const { data, setData, put, processing } = useForm({
+    name: product.name || '',
+    description: product.description || '',
+    price: product.price || '',
+    image: null
+  });
+
+  const handleFileChange = (e) => {
+    setData('image', e.target.files[0]);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('name', product.name || '');
+    formData.append('description', product.description || '');
+    formData.append('price', product.price || '');
+
+    if (product.image) {
+      formData.append('image', product.image);
+    }
+
+    put(route('product.update', product.id), {
+      data: formData,
+      preserveScroll: true,
+      onBefore: () => console.log("Updating product..."),
+      onSuccess: () => console.log("Product updated successfully!"),
+      onError: (errors) => console.error(errors),
+    });
+  };
 
   return (
     <div>
@@ -85,27 +105,26 @@ const Create = ({ auth }) => {
           </div>
         </div>
         {successMessage && <div className="alert alert-success">{successMessage}</div>}
-        <form className="max-w-sm mx-auto" action="/product/store" method="POST" encType="multipart/form-data" >
+        <form className="max-w-sm mx-auto" onSubmit={handleSubmit} encType="multipart/form-data" >
           <input type="hidden" name="_token" value={csrfToken} />
           <div className="mb-5">
             <label htmlFor="product_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Name</label>
-            <input type="text" id="product_name" name='name' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+            <input type="text" id="product_name" name='name' value={data.name} onChange={(e) => setData('name', e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
           </div>
           <div className="mb-5">
-
-            <label htmlFor="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">product description</label>
-            <textarea id="description" name='description' rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."></textarea>
+            <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">product description</label>
+            <textarea id="description" name='description' value={data.description} onChange={(e) => setData('description', e.target.value)} rows="4" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."></textarea>
 
           </div>
           <div className="mb-5">
             <label htmlFor="product_price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Price</label>
-            <input type="number" id="product_price" name='price' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required step="0.01" />
+            <input type="number" id="product_price" name='price' value={data.price} onChange={(e) => setData('price', e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required step="0.01" />
           </div>
           <div className="mb-5">
             <label htmlFor="product_image" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Image</label>
-            <input type="file" id="product_image" name='image' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required accept="image/*" />
+            <input type="file" id="product_image" name='image' onChange={handleFileChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" accept="image/*" />
           </div>
-          <button type="submit" className="text-white bg-[#f97316] hover:bg-[#f97316] focus:ring-4 focus:outline-none focus:ring-[#f97316] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-[#f97316] dark:hover:bg-[#f97316] dark:focus:ring-[#f97316]">create</button>
+          <button type="submit" disabled={processing} className="text-white bg-[#f97316] hover:bg-[#f97316] focus:ring-4 focus:outline-none focus:ring-[#f97316] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-[#f97316] dark:hover:bg-[#f97316] dark:focus:ring-[#f97316]">Update Product</button>
         </form>
       </div>
     </div>
@@ -113,4 +132,4 @@ const Create = ({ auth }) => {
   )
 }
 
-export default Create
+export default Edit;

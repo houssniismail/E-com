@@ -18,6 +18,7 @@ export default function Dashboard() {
                         <div className=" text-gray-900">
                             <div className=" grid grid-cols-4 max-w-screen-2xl ">
                                 <a className=' m-4 w-full border p-4 text-center font-bold text-[30px] rounded-lg text-white bg-[#22c55e] ' href={'/products'}>List of products</a>
+                                <a className=' m-4 w-full border p-4 text-center font-bold text-[30px] rounded-lg text-white bg-[#22c55e] ' href={'/categories'}>List of Categories</a>
                             </div>
                         </div>
                     </div>

@@ -54,13 +54,11 @@ const LoginRegister = ({ auth, status, canResetPassword }) => {
 
     return (
         <div>
-
             <Head title="index" />
             <div className="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50 h-[100vh]">
                 <img
                     id="background"
                     className="absolute -left-20 top-0 max-w-[877px]"
-
                 />
                 <div className="relative flex  flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white">
                     <div className="relative w-full max-w-2xl px-6 lg:max-w-7xl">
@@ -80,7 +78,6 @@ const LoginRegister = ({ auth, status, canResetPassword }) => {
                             </div>
                             <div>
                                 <form className="max-w-md mx-auto">
-                                    {/* <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label> */}
                                     <div className="relative">
                                         <input type="text" className=" w-full p-4 ps-10 border-[#f27a1a]  text-sm text-gray-900 focus:border-[#f27a1a] outline-none rounded-lg bg-gray-50 " placeholder="Search Mockups, Logos..." required />
                                         <button type="submit" className="text-white absolute end-2.5 bottom-2.5  outline-none font-medium rounded-lg text-sm px-4 py-2  ">
@@ -117,10 +114,9 @@ const LoginRegister = ({ auth, status, canResetPassword }) => {
                                 )}
                             </nav>
                         </header>
-
                         <main className="bg-white">
                             <div className="grid gap-6 lg:grid-cols-2 lg:gap-8 border my-6 py-6">
-                                <div className="mx-6 lg:border-r-2">
+                                <div className="px-6 lg:border-r-2">
                                     <div className='my-2'>
                                         <p>Log in</p>
                                     </div>
@@ -129,11 +125,9 @@ const LoginRegister = ({ auth, status, canResetPassword }) => {
                                             {status}
                                         </div>
                                     )}
-
-                                    <form onSubmit={submit} className='max-w-sm ' >
+                                    <form onSubmit={submit} className='w-full' >
                                         <div>
                                             <InputLabel htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" value="Email" />
-
                                             <TextInput
                                                 id="email"
                                                 type="email"
@@ -144,13 +138,10 @@ const LoginRegister = ({ auth, status, canResetPassword }) => {
                                                 isFocused={true}
                                                 onChange={(e) => setData('email', e.target.value)}
                                             />
-
                                             <InputError message={errors.email} className="mt-2" />
                                         </div>
-
                                         <div className="mt-4">
                                             <InputLabel htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" value="Password" />
-
                                             <TextInput
                                                 id="password"
                                                 type="password"
@@ -160,10 +151,8 @@ const LoginRegister = ({ auth, status, canResetPassword }) => {
                                                 autoComplete="current-password"
                                                 onChange={(e) => setData('password', e.target.value)}
                                             />
-
                                             <InputError message={errors.password} className="mt-2" />
                                         </div>
-
                                         <div className="mt-4 block">
                                             <label className="flex items-center">
                                                 <Checkbox
@@ -178,7 +167,6 @@ const LoginRegister = ({ auth, status, canResetPassword }) => {
                                                 </span>
                                             </label>
                                         </div>
-
                                         <div className='flex justify-end'>
                                             {canResetPassword && (
                                                 <Link
@@ -189,23 +177,18 @@ const LoginRegister = ({ auth, status, canResetPassword }) => {
                                                 </Link>
                                             )}
                                         </div>
-
                                         <div className="mt-4 flex items-center justify-start">
-
-
                                             <PrimaryButton className="text-white bg-[#f97316] hover:bg-[#f97316] focus:ring-4 focus:outline-none focus:ring-[#f97316] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-[#f97316] dark:hover:bg-[#f97316] dark:focus:ring-[#f97316]" disabled={processing}>
                                                 Log in
                                             </PrimaryButton>
                                         </div>
                                     </form>
-                                    {/* </GuestLayout> */}
-
                                 </div>
-                                <div className="mx-6">
+                                <div className="px-6">
                                     <div className='my-2'>
                                         <p>Sign up</p>
                                     </div>
-                                    <form className='max-w-sm ' action="register" method="POST">
+                                    <form className='w-full ' action="register" method="POST">
                                         <input type="hidden" name="_token" value={csrfToken} />
                                         <div className="mb-5">
                                             <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name *</label>
@@ -213,27 +196,26 @@ const LoginRegister = ({ auth, status, canResetPassword }) => {
                                         </div>
                                         <div className="mb-5">
                                             <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email *</label>
-                                            <input type="email" name='email' id="emailRegister" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+                                            <input type="email" autoComplete="username" name='email' id="emailRegister" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
                                         </div>
                                         <div className="mb-5">
                                             <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password *</label>
-                                            <input type="password" id="passwordRegister" name='password' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+                                            <input type="password" autoComplete="new-password" id="passwordRegister" name='password' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
                                         </div>
                                         <div className="mb-5">
                                             <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password Confirmation *</label>
-                                            <input type="password" name='password_confirmation' id="password_confirmation" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+                                            <input type="password" autoComplete="new-password" name='password_confirmation' id="password_confirmation" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
                                         </div>
-
                                         <div>
                                             <div>
                                                 <p className='block mb-2 text-sm font-medium text-gray-900 dark:text-white' >Gender (Optional)</p>
                                             </div>
-                                            <div className="grid grid-cols-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-12 my-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <div className="grid grid-cols-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full h-12 my-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                 <button className='border-r-2' >Man</button>
                                                 <button>Woman</button>
                                             </div>
                                         </div>
-                                        <div>
+                                        <div className=' flex justify-end '>
                                             <Link
                                                 href={route('login')}
                                                 className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -249,7 +231,6 @@ const LoginRegister = ({ auth, status, canResetPassword }) => {
                     </div>
                 </div>
             </div>
-
         </div>
     )
 }

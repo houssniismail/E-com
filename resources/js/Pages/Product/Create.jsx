@@ -2,25 +2,16 @@ import React from 'react'
 import { Head, Link, usePage } from '@inertiajs/react';
 
 const Create = ({ auth }) => {
-
-  const handleImageError = () => {
-    document
-      .getElementById('screenshot-container')
-      ?.classList.add('!hidden');
-    document.getElementById('docs-card')?.classList.add('!row-span-1');
-    document
-      .getElementById('docs-card-content')
-      ?.classList.add('!flex-row');
-    document.getElementById('background')?.classList.add('!hidden');
-  };
-
   const { props } = usePage();
+  const categories = props.categories || [];
   const successMessage = props.flash?.success;
   const csrfToken = props.csrf_token;
 
+  console.log(categories);
+  
+
   return (
     <div>
-
       <Head title="index" />
       <div className="bg-gray-50 h-[100vh] text-black/50 dark:bg-black dark:text-white/50">
         <img
@@ -93,14 +84,34 @@ const Create = ({ auth }) => {
           </div>
           <div className="mb-5">
 
-            <label htmlFor="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">product description</label>
-            <textarea id="description" name='description' rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."></textarea>
+            <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">product description</label>
+            <textarea id="description" name='description' rows="4" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."></textarea>
 
           </div>
           <div className="mb-5">
             <label htmlFor="product_price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Price</label>
             <input type="number" id="product_price" name='price' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required step="0.01" />
           </div>
+
+
+          <div className="mb-5">
+            <label htmlFor="categories" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Choose a Category
+            </label>
+            <select
+              id="categories"
+              name='category_id'
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="" defaultValue>Choose a Category</option>
+              {categories.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <div className="mb-5">
             <label htmlFor="product_image" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Image</label>
             <input type="file" id="product_image" name='image' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required accept="image/*" />
