@@ -38,7 +38,6 @@ const Index = ({ auth }) => {
                             </div>
                             <div>
                                 <form className="max-w-md mx-auto">
-                                    {/* <label htmlhtmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label> */}
                                     <div className="relative">
                                         <input type="text" id="default-search" className="block w-full p-4 ps-10 text-sm text-gray-900 outline-none rounded-lg bg-gray-50 " placeholder="Search Mockups, Logos..." required />
                                         <button type="submit" className="text-white absolute end-2.5 bottom-2.5  outline-none font-medium rounded-lg text-sm px-4 py-2  ">
@@ -78,7 +77,7 @@ const Index = ({ auth }) => {
                     </div>
                 </div>
                 <section className="bg-gray-50 dark:bg-gray-900 py-3 sm:py-5">
-                    <div className="px-4 mx-auto max-w-screen-2xl lg:px-12">
+                    <div className="px-4 mx-auto max-w-screen-sm lg:px-12">
                         <div className="relative overflow-hidden bg-white shadow-md dark:bg-gray-800 sm:rounded-lg">
                             <div className="overflow-x-auto">
                                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -86,7 +85,6 @@ const Index = ({ auth }) => {
                                         <tr>
                                             <th scope="col" className="px-4 py-3">Image</th>
                                             <th scope="col" className="px-4 py-3">Name</th>
-                                            {/* <th scope="col" className="px-4 py-3">Price</th> */}
                                             <th scope="col" className="px-4 py-3">Actions</th>
                                         </tr>
                                     </thead>
@@ -108,12 +106,9 @@ const Index = ({ auth }) => {
 
                                                     </th>
                                                     <td className="px-4 py-2">{category.name}</td>
-                                                    {/* <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                        ${category}
-                                                    </td> */}
                                                     <td className=" flex ">
                                                         <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Show</button>
-                                                        <DeleteButton categoryId={category.id} onDelete={handleCategoryDelete} />                                                        <button type="button" className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                                                        <DeleteButton Id={category.id} onDelete={handleCategoryDelete} />                                                        <button type="button" className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
                                                         <a href={`/category/${category.id}/edit`} className="text-white">Edit</a>
                                                         </button>
 
@@ -128,9 +123,9 @@ const Index = ({ auth }) => {
                             <nav className="flex flex-col items-start justify-between p-4 space-y-3 md:flex-row md:items-center md:space-y-0" aria-label="Table navigation">
                                 <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
                                     Showing
-                                    <span className="font-semibold text-gray-900 dark:text-white">1-10</span>
+                                    <span className="font-semibold text-gray-900 dark:text-white">1-5</span>
                                     of
-                                    <span className="font-semibold text-gray-900 dark:text-white">1000</span>
+                                    <span className="font-semibold text-gray-900 dark:text-white">{categories.length}</span>
                                 </span>
 
 

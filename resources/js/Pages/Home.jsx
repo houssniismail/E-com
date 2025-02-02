@@ -1,5 +1,4 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-
 export default function Welcome({ auth, laravelVersion, phpVersion }) {
     const { props } = usePage();
     const products = props.products || [];
@@ -45,12 +44,23 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                             </div>
                             <nav className="-mx-3 flex flex-1 justify-end">
                                 {auth.user ? (
-                                    <Link
-                                        href={route('dashboard')}
-                                        className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                                    >
-                                        Dashboard
-                                    </Link>
+                                    <div className='grid grid-cols-2 items-center'>
+                                        <Link
+                                            href={route('dashboard')}
+                                            className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                        >
+                                            Dashboard
+                                        </Link>
+                                        <Link
+                                            href={route('cart')}
+                                            className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                        >
+                                            <svg width="30" height="30" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M3.75 8.25A.75.75 0 0 0 3 9v10.125c0 1.418 1.207 2.625 2.625 2.625h12.75c1.418 0 2.625-1.149 2.625-2.566V9a.75.75 0 0 0-.75-.75H3.75Z" clip-rule="evenodd"></path>
+                                                <path d="M7.5 8.25v-1.5a4.5 4.5 0 0 1 4.5-4.5v0a4.5 4.5 0 0 1 4.5 4.5v1.5"></path>
+                                            </svg>
+                                        </Link>
+                                    </div>
                                 ) : (
                                     <>
                                         <Link
@@ -79,7 +89,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                                         <a
                                             id="product_card_1"
                                             className="flex "
-                                            href='#'
+                                            href={route('products-category', { id: category.id })}
                                             key={category.id}
                                         >
                                             <div className="relative flex items-center gap-6 lg:items-end">
@@ -88,12 +98,11 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                                                     className="flex items-start gap-6 flex-col"
                                                 >
                                                     <div className="">
-                                                        <img src={`/storage/${category.image}`} className='rounded-[20px] h-[940px]' alt="Example Image" />
+                                                        <img src={`/storage/${category.image}`} className='rounded-[20px] ' alt="Example Image" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </a>
-
                                     ))
                                 )}
                             </div>
