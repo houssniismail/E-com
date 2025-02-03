@@ -1,7 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
 
 const Cart = ({ auth }) => {
+    const { props } = usePage();
+    const csrfToken = props.csrf_token;
+
+    // const productsSale = props.productsSale;
+    const [productsSale, setProductsSale] = useState(props.productsSale)
+    const handleRemove = async (saleId) => {
+        try {
+            const response = await fetch(`/sale/${saleId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete sale');
+            }
+
+            // After successful deletion, you can update the state to remove the deleted sale
+            setProductsSale(prevState => prevState.filter(sale => sale.id !== saleId));
+
+        } catch (error) {
+            console.error('Error deleting sale:', error);
+        }
+    };
+
+
+
     return (
         <>
             <Head title="index" />
@@ -69,66 +98,48 @@ const Cart = ({ auth }) => {
                             <p>Seller: <span className=' text-black font-bold'>Trendyol</span></p>
                         </div>
                         <div className='mx-4'>
-                            <div className=' grid grid-cols-4 pt-4'>
-                                <div className=' pl-4 mx-auto'>
-                                    <img className='w-40' src="/images/image1.webp" alt="" />
-                                </div>
-                                <div className=' pl-4 mx-auto'>
-                                    <p className=' text-black font-bold'>Trendyol Collection Ecru Wide Pattern St...</p>
-                                    <p>Delivery 21 - 23 January</p>
-                                    <p>Size: M</p>
-                                </div>
-                                <div className=' pl-4 mx-auto'>
-                                    <p className=' text-black font-bold'>25.60 AED 63.99</p>
-                                    <p>Savings: 44.00 AED</p>
-                                </div>
-                                <div className=' text-red-600 pl-4 mx-auto'>
-                                    <svg width="30" height="30" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M20.979 4.5H15.75V2.25A.75.75 0 0 0 15 1.5H9a.75.75 0 0 0-.75.75V4.5H3.021L3 6.375h1.547l.942 14.719A1.5 1.5 0 0 0 6.984 22.5h10.032a1.5 1.5 0 0 0 1.496-1.404l.941-14.721H21L20.979 4.5ZM8.25 19.5l-.422-12h1.547l.422 12H8.25Zm4.5 0h-1.5v-12h1.5v12Zm1.125-15h-3.75V3.187A.188.188 0 0 1 10.313 3h3.374a.188.188 0 0 1 .188.188V4.5Zm1.875 15h-1.547l.422-12h1.547l-.422 12Z"></path>
-                                    </svg>
-                                </div>
-                            </div>
+                            {
+                                productsSale && productsSale.length > 0 ? (
+                                    <div>
+                                        {productsSale.map(sale => (
+                                            <div key={sale.id}>
+                                                {sale && sale.products.length > 0 && (
+                                                    <div className='grid grid-cols-4 pt-4'>
 
-                            <div className=' grid grid-cols-4 pt-4'>
-                                <div className=' pl-4 mx-auto'>
-                                    <img className='w-40' src="/images/image1.webp" alt="" />
-                                </div>
-                                <div className=' pl-4 mx-auto'>
-                                    <p className=' text-black font-bold'>Trendyol Collection Ecru Wide Pattern St...</p>
-                                    <p>Delivery 21 - 23 January</p>
-                                    <p>Size: M</p>
-                                </div>
-                                <div className=' pl-4 mx-auto'>
-                                    <p className=' text-black font-bold'>25.60 AED 63.99</p>
-                                    <p>Savings: 44.00 AED</p>
-                                </div>
-                                <div className=' text-red-600 pl-4 mx-auto'>
-                                    <svg width="30" height="30" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M20.979 4.5H15.75V2.25A.75.75 0 0 0 15 1.5H9a.75.75 0 0 0-.75.75V4.5H3.021L3 6.375h1.547l.942 14.719A1.5 1.5 0 0 0 6.984 22.5h10.032a1.5 1.5 0 0 0 1.496-1.404l.941-14.721H21L20.979 4.5ZM8.25 19.5l-.422-12h1.547l.422 12H8.25Zm4.5 0h-1.5v-12h1.5v12Zm1.125-15h-3.75V3.187A.188.188 0 0 1 10.313 3h3.374a.188.188 0 0 1 .188.188V4.5Zm1.875 15h-1.547l.422-12h1.547l-.422 12Z"></path>
-                                    </svg>
-                                </div>
-                            </div>
+                                                        <div className='pl-4 mx-auto'>
+                                                            <img className='w-16' src={`/storage/${sale.products[0].image}`} alt={sale.products[0].name} />
+                                                        </div>
 
-                            <div className=' grid grid-cols-4 pt-4'>
-                                <div className=' pl-4 mx-auto'>
-                                    <img className='w-40' src="/images/image1.webp" alt="" />
-                                </div>
-                                <div className=' pl-4 mx-auto'>
-                                    <p className=' text-black font-bold'>Trendyol Collection Ecru Wide Pattern St...</p>
-                                    <p>Delivery 21 - 23 January</p>
-                                    <p>Size: M</p>
-                                </div>
-                                <div className=' pl-4 mx-auto'>
-                                    <p className=' text-black font-bold'>25.60 AED 63.99</p>
-                                    <p>Savings: 44.00 AED</p>
-                                </div>
-                                <div className=' text-red-600 pl-4 mx-auto'>
-                                    <svg width="30" height="30" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M20.979 4.5H15.75V2.25A.75.75 0 0 0 15 1.5H9a.75.75 0 0 0-.75.75V4.5H3.021L3 6.375h1.547l.942 14.719A1.5 1.5 0 0 0 6.984 22.5h10.032a1.5 1.5 0 0 0 1.496-1.404l.941-14.721H21L20.979 4.5ZM8.25 19.5l-.422-12h1.547l.422 12H8.25Zm4.5 0h-1.5v-12h1.5v12Zm1.125-15h-3.75V3.187A.188.188 0 0 1 10.313 3h3.374a.188.188 0 0 1 .188.188V4.5Zm1.875 15h-1.547l.422-12h1.547l-.422 12Z"></path>
-                                    </svg>
-                                </div>
-                            </div>
+                                                        <div className='pl-4 mx-auto'>
+                                                            <p className='text-black font-bold'>{sale.products[0].name}</p>
+                                                            <p>Delivery 21 - 23 January</p>
+                                                            <p>Size: {sale.size}</p>
+                                                        </div>
+                                                        {/* Price Info */}
+                                                        <div className='pl-4 mx-auto'>
+                                                            <p className='text-black font-bold'>{sale.products[0].price} AED</p>
+                                                            <p>Savings: 44.00 AED</p>
+                                                        </div>
+                                                        <div className='text-red-600 pl-4 mx-auto'>
+                                                            <button onClick={() => handleRemove(sale.id)}>
+                                                                <svg width="30" height="30" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M20.979 4.5H15.75V2.25A.75.75 0 0 0 15 1.5H9a.75.75 0 0 0-.75.75V4.5H3.021L3 6.375h1.547l.942 14.719A1.5 1.5 0 0 0 6.984 22.5h10.032a1.5 1.5 0 0 0 1.496-1.404l.941-14.721H21L20.979 4.5ZM8.25 19.5l-.422-12h1.547l.422 12H8.25Zm4.5 0h-1.5v-12h1.5v12Zm1.125-15h-3.75V3.187A.188.188 0 0 1 10.313 3h3.374a.188.188 0 0 1 .188.188V4.5Zm1.875 15h-1.547l.422-12h1.547l-.422 12Z"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <p>No sales found.</p>
+                                    </div>
+                                )
+                            }
                         </div>
+
                     </div>
                     <div className='border m-4'>
                         <div className=' m-4 border rounded-xl bg-white'>

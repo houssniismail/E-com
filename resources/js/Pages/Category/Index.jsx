@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import DeleteButton from '@/Components/DeleteButton';
 
 const Index = ({ auth }) => {

@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Head, Link, usePage } from '@inertiajs/react';
+import { useForm } from 'react-hook-form';
 
 const ShowProductsOfOneCategory = ({ auth }) => {
   const { props } = usePage();
   const category = props.category;
+  const [qty, setQty] = useState(0)
+  const csrfToken = props.csrf_token;
 
-  console.log(category);
+  const HandelClick = () => {
+    setQty(qty++)
+  }
 
   return (
     <>
@@ -41,12 +46,23 @@ const ShowProductsOfOneCategory = ({ auth }) => {
               </div>
               <nav className="-mx-3 flex flex-1 justify-end">
                 {auth.user ? (
-                  <Link
-                    href={route('dashboard')}
-                    className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                  >
-                    Dashboard
-                  </Link>
+                  <div className='grid grid-cols-2 items-center'>
+                    <Link
+                      href={route('dashboard')}
+                      className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                    >
+                      Dashboard
+                    </Link>
+                    <Link
+                      href={route('cart')}
+                      className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                    >
+                      <svg width="30" height="30" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3.75 8.25A.75.75 0 0 0 3 9v10.125c0 1.418 1.207 2.625 2.625 2.625h12.75c1.418 0 2.625-1.149 2.625-2.566V9a.75.75 0 0 0-.75-.75H3.75Z" clip-rule="evenodd"></path>
+                        <path d="M7.5 8.25v-1.5a4.5 4.5 0 0 1 4.5-4.5v0a4.5 4.5 0 0 1 4.5 4.5v1.5"></path>
+                      </svg>
+                    </Link>
+                    </div>
                 ) : (
                   <>
                     <Link
@@ -100,40 +116,44 @@ const ShowProductsOfOneCategory = ({ auth }) => {
                             <div>
                               <img className="w-6" src="/images/etoile.png" alt="star icon" />
                             </div>
-                            <div className='grid grid-cols-2 items-center'>
-                              <div>
-                                <p>{product.price}$</p>
+                            <form action={route('sale')} method='POST' >
+                              <input type="hidden" name="_token" value={csrfToken} />
+                              <div className='grid grid-cols-2 items-center mb-6'>
+                                <div>
+                                  <p>{product.price}$</p>
+                                </div>
+                                <div className='flex items-center'>
+                                  {/* <p>Size</p> */}
+                                  <select name="size" id="">
+                                    <option value="">choose size</option>
+                                    <option value="XS">XS</option>
+                                    <option value="S">S</option>
+                                    <option value="M">M</option>
+                                    <option value="L">L</option>
+                                    <option value="XL">XL</option>
+                                  </select>
+                                </div>
                               </div>
-                              <div className='flex items-center'>
-                                {/* <p>Size</p> */}
-                                <select name="" id="">
-                                  <option value="">choose size</option>
-                                  <option value="">XS</option>
-                                  <option value="">S</option>
-                                  <option value="">M</option>
-                                  <option value="">L</option>
-                                  <option value="">XL</option>
-                                </select>
+                              <div className='grid grid-cols-2 w-full h-12 '>
+                                <div className="relative flex items-center h-12 max-w-[8rem]">
+                                  <button type="button" id="decrement-button" data-input-counter-decrement="quantity-input" className="bg-gray-100 h-12 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 p-3  focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+                                    <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
+                                    </svg>
+                                  </button>
+                                  <input type="number" id="quantity-input" name='qty' min="0" data-input-counter aria-describedby="helper-text-explanation" className="bg-gray-50 border-x-0 border-gray-300 h-12 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+                                  <button onClick={() => HandelClick()} type="button" id="increment-button" data-input-counter-increment="quantity-input" className="bg-gray-100 dark:bg-gray-700 h-12 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300  p-3  focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none" >
+                                    <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
+                                    </svg>
+                                  </button>
+                                </div>
+                                <input hidden name='product_id' type="text" value={product.id} />
+                                <div className=' flex justify-end'>
+                                  <button type='submit' className=' w-full text-center text-white p-2 bg-[#ea580c] h-12'>Add To Cart</button>
+                                </div>
                               </div>
-                            </div>
-                            <div className='grid grid-cols-2 w-full h-12 '>
-                              <div className="relative flex items-center h-12 max-w-[8rem]">
-                                <button type="button" id="decrement-button" data-input-counter-decrement="quantity-input"  className="bg-gray-100 h-12 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 p-3  focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
-                                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                                    <path stroke="currentColor" strokeLinecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16" />
-                                  </svg>
-                                </button>
-                                <input type="text" id="quantity-input" data-input-counter aria-describedby="helper-text-explanation" className="bg-gray-50 border-x-0 border-gray-300 h-12 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="999" required />
-                                <button type="button" id="increment-button" data-input-counter-increment="quantity-input" className="bg-gray-100 dark:bg-gray-700 h-12 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300  p-3  focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
-                                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
-                                  </svg>
-                                </button>
-                              </div>
-                              <div className=' flex justify-end'>
-                                <button className=' w-full text-center text-white p-2 bg-[#ea580c] h-12'>Add To Cart</button>
-                              </div>
-                            </div>
+                            </form>
                           </div>
                         </div>
                       </div>

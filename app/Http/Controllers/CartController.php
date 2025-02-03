@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Sale;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -12,7 +14,12 @@ class CartController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Cart');
+        $user = Auth::user();
+
+        // Retrieve the user's sales along with the associated products
+        $userSales = $user->sales()->latest()->with('products')->get();
+
+        return Inertia::render('Cart', ['productsSale' => $userSales]);
     }
 
     /**

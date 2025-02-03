@@ -6,6 +6,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
+
+
 
 class User extends Authenticatable
 {
@@ -22,6 +26,12 @@ class User extends Authenticatable
         'email',
         'password',
     ];
+
+    public function sales()
+    {
+        return $this->hasManyThrough(Sale::class, UserSale::class, 'user_id', 'id', 'id', 'sale_id');
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.

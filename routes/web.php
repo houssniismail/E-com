@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\SaleController;
 use App\Http\Controllers\ShowProductsOfOneCategoryController;
 use App\Http\Controllers\HomeController;
 use Inertia\Inertia;
@@ -39,6 +40,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('category.delete');
 
     Route::get('/cart',[CartController::class,'index'])->name('cart');
+
+    Route::post('/sale',[SaleController::class,'store'])->name('sale');
+    Route::delete('/sale/{id}', [SaleController::class, 'destroy'])->name('sales.destroy');
 
 });
 
