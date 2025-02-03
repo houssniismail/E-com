@@ -4,8 +4,6 @@ import { Head, Link, usePage } from '@inertiajs/react';
 const Cart = ({ auth }) => {
     const { props } = usePage();
     const csrfToken = props.csrf_token;
-
-    // const productsSale = props.productsSale;
     const [productsSale, setProductsSale] = useState(props.productsSale)
     const handleRemove = async (saleId) => {
         try {
@@ -21,7 +19,6 @@ const Cart = ({ auth }) => {
                 throw new Error('Failed to delete sale');
             }
 
-            // After successful deletion, you can update the state to remove the deleted sale
             setProductsSale(prevState => prevState.filter(sale => sale.id !== saleId));
 
         } catch (error) {
@@ -115,7 +112,6 @@ const Cart = ({ auth }) => {
                                                             <p>Delivery 21 - 23 January</p>
                                                             <p>Size: {sale.size}</p>
                                                         </div>
-                                                        {/* Price Info */}
                                                         <div className='pl-4 mx-auto'>
                                                             <p className='text-black font-bold'>{sale.products[0].price} AED</p>
                                                             <p>Savings: 44.00 AED</p>

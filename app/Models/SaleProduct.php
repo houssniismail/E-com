@@ -7,26 +7,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SaleProduct extends Model
 {
-    protected $table = 'sale_products'; // Explicitly defining the table name (optional)
+    protected $table = 'sale_products';
 
     protected $fillable = [
         'product_id',
         'sale_id',
+        // 'qty',
     ];
 
-    /**
-     * Get the product associated with the sale.
-     */
-    public function product(): BelongsTo
+    public function sale()
+    {
+        return $this->belongsTo(Sale::class);
+    }
+
+    public function product()
     {
         return $this->belongsTo(Product::class);
     }
 
-    /**
-     * Get the sale associated with the product.
-     */
-    public function sale(): BelongsTo
-    {
-        return $this->belongsTo(Sale::class);
-    }
+
 }

@@ -24,4 +24,14 @@ class Sale extends Model
     {
         return $this->belongsToMany(Product::class, 'sale_products', 'sale_id', 'product_id');
     }
+
+    public function saleProducts()
+    {
+        return $this->hasMany(SaleProduct::class);  
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

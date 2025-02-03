@@ -38,25 +38,44 @@ class SaleController extends Controller
             'product_id' => 'required|exists:products,id',
         ]);
 
+        
+        $existingSale = UserSale::whereHas('sale.saleProducts', function ($query) use ($validatedData) {
+            $query->where('product_id', $validatedData['product_id'])
+                ->where('size', $validatedData['size']);
+        })
+            ->whereHas('sale', function ($query) {
+                $query->where('user_id', Auth::id());
+            })
+            ->first();
 
-        $sale = Sale::create([
-            'qty' => $validatedData['qty'],
-            'size' => $validatedData['size'],
-        ]);
 
 
-        UserSale::create([
-            'user_id' => Auth::id(),
-            'sale_id' => $sale->id,
-        ]);
+        if ($existingSale) {
+            $existingSale->sale->qty += $validatedData['qty'];
+            $existingSale->sale->save();
 
-        SaleProduct::create([
-            'sale_id' => $sale->id,
-            'product_id' => $validatedData['product_id'],
-        ]);
+            return redirect()->back()->with('success', 'Sale quantity updated successfully!');
+        } else {
+            $sale = Sale::create([
+                'qty' => $validatedData['qty'],
+                'size' => $validatedData['size'],
+            ]);
 
-        return redirect()->back()->with('success', 'Sale added successfully!');
+            UserSale::create([
+                'user_id' => Auth::id(),
+                'sale_id' => $sale->id,
+            ]);
+
+            SaleProduct::create([
+                'sale_id' => $sale->id,
+                'product_id' => $validatedData['product_id'],
+                // 'qty' => $validatedData['qty'], 
+            ]);
+
+            return redirect()->back()->with('success', 'Sale added successfully!');
+        }
     }
+
 
     /**
      * Display the specified resource.
@@ -93,7 +112,7 @@ class SaleController extends Controller
             return response()->json(['message' => 'Sale not found'], 404);
         }
 
-        $sale->products()->detach(); 
+        $sale->products()->detach();
 
         $sale->delete();
 

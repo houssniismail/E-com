@@ -25,8 +25,13 @@ class UserSale extends Model
     /**
      * Get the sale associated with the user.
      */
-    public function sale(): BelongsTo
-    {
-        return $this->belongsTo(Sale::class);
-    }
+    public function sale()
+{
+    return $this->belongsTo(Sale::class);
+}
+
+    // public function sale()
+    // {
+    //     return $this->belongsTo(Sale::class);
+    // }
 }
