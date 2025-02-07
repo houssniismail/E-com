@@ -7,6 +7,8 @@ use App\Models\Sale;
 use App\Models\UserSale;
 use App\Models\SaleProduct;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 
 class SaleController extends Controller
@@ -16,7 +18,12 @@ class SaleController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Sale/Index',[
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
+            'laravelVersion' => Application::VERSION,
+            'phpVersion' => PHP_VERSION,
+        ]);
     }
 
     /**
@@ -38,7 +45,6 @@ class SaleController extends Controller
             'product_id' => 'required|exists:products,id',
         ]);
 
-        
         $existingSale = UserSale::whereHas('sale.saleProducts', function ($query) use ($validatedData) {
             $query->where('product_id', $validatedData['product_id'])
                 ->where('size', $validatedData['size']);

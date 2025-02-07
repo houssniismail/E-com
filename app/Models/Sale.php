@@ -12,7 +12,8 @@ class Sale extends Model
 
     protected $fillable = [
         'qty',
-        'size'
+        'size',
+        'checkout'
     ];
 
     public function users(): BelongsToMany
